@@ -7,6 +7,8 @@ tags:
     description: Browse cocktails
   - name: ingredient
     description: Browse ingredients
+  - name: category
+    description: Browse categories
 paths:
   /cocktails/{cocktailId}:
     put:
@@ -136,7 +138,65 @@ paths:
                   $ref: '#/components/schemas/Cocktail'
         '400':
           description: Invalid query
-          
+  /categories:
+    post:
+      tags:
+        - category
+      summary: Create a category
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+        '400':
+          description: Invalid query
+    get:
+      tags:
+        - category
+      summary: Get all categories
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    name:
+                      type: string
+                    description:
+                      type: string
+        '400':
+          description: Invalid query
+  /categories/{categoryId}:
+    delete: 
+      tags:
+        - category
+      summary: Delete a category by id
+      parameters:
+        - in: path
+          name: categoryId
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid ID
   /ingredients/{ingredientId}:
     put:
       tags:

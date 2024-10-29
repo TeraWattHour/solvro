@@ -6,7 +6,8 @@
     "npm:@hono/node-server@*": "1.13.3_hono@4.6.8",
     "npm:@hono/swagger-ui@*": "0.4.1_hono@4.6.8",
     "npm:@hono/zod-openapi@*": "0.16.4_hono@4.6.8_zod@3.23.8",
-    "npm:hono@*": "4.6.8"
+    "npm:hono@*": "4.6.8",
+    "npm:zod@*": "3.23.8"
   },
   "jsr": {
     "@hono/hono@4.6.8": {
@@ -91,7 +92,6 @@
     "https://deno.land/x/zod@v3.4.0/helpers/partialUtil.ts": "baac62446bc98e2d182561a7a0dceede29305e681ea23f2d2fcc89e280bd1f20",
     "https://deno.land/x/zod@v3.4.0/helpers/util.ts": "32e16ef9d1374e4627bc4d355746539a0a16864fca0b99bfeb20d2d06967e306",
     "https://deno.land/x/zod@v3.4.0/index.ts": "e245f85f4bebc90a9439c7b286f1776aa3ddcf634ff5151c1a41e4dc05dbb693",
-    "https://deno.land/x/zod@v3.4.0/mod.ts": "64e55237cb4410e17d968cd08975566059f27638ebb0b86048031b987ba251c4",
     "https://deno.land/x/zod@v3.4.0/types.ts": "bc1fb51670ec58a162b01442a18212f5ee3baf30b164238bbac350055ac0e4cf"
   },
   "workspace": {

@@ -4,3 +4,5 @@
 3. `deno task start`
 
 Endpoints documentes in Swagger Docs `/ui`
+
+Deno version 2.0.3

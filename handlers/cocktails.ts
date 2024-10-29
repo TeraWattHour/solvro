@@ -1,5 +1,5 @@
 import type { Context } from "hono";
-import { z, ZodError } from "https://deno.land/x/zod@v3.4.0/mod.ts";
+import { z, ZodError } from "npm:zod";
 
 import type { Env } from "../types.ts";
 
@@ -15,8 +15,8 @@ const getCocktailSchema = z.object({
   has_ingredients: z.array(z.number().int().min(1)).optional(),
   no_ingredients: z.array(z.number().int().min(1)).optional(),
 
-  limit: z.number().int().min(1).max(25).default(10),
-  page: z.number().int().min(1).default(1),
+  limit: z.number({ coerce: true }).int().min(1).max(25).default(10),
+  page: z.number({ coerce: true }).int().min(1).default(1),
 });
 
 export function cocktails(c: Context<Env>) {
@@ -29,7 +29,7 @@ export function cocktails(c: Context<Env>) {
       has_ingredients: q.has_ingredients?.split(",").map(Number),
       no_ingredients: q.no_ingredients?.split(",").map(Number),
     });
-  } catch (e: unknown) {
+  } catch (e) {
     return c.json({ error: (e as ZodError).errors }, 400);
   }
 
@@ -52,6 +52,7 @@ export function cocktails(c: Context<Env>) {
   left join cocktail_ingredients ci on ci.cocktail_id = c.id
   left join ingredients i on i.id = ci.ingredient_id
   where ${predicates.join(" AND ")}
+  group by c.id
   having (? is null or max(is_alcoholic) = ?) 
   LIMIT ? 
   OFFSET ?`;

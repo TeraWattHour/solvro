@@ -1,6 +1,7 @@
-import { Hono, type Context } from "hono";
+import { Hono } from "hono";
 import { serveStatic } from "hono/deno";
 import { swaggerUI } from "npm:@hono/swagger-ui";
+import { z } from "npm:zod";
 
 import { DB } from "https://deno.land/x/sqlite/mod.ts";
 
@@ -39,5 +40,31 @@ app.delete("/ingredients/detach/:cocktail_id/:ingredient_id", detachIngredient);
 app.post("/ingredients", createIngredient);
 app.put("/ingredients/:id", editIngredient);
 app.delete("/ingredients/:id", deleteIngredient);
+
+app.get("/categories", (c) => {
+  return c.json(c.var.db.queryEntries("SELECT * FROM categories"));
+});
+
+app.post("/categories", async (c) => {
+  const schema = z.object({
+    name: z.string(),
+    description: z.string().optional(),
+  });
+
+  const res = schema.safeParse(await c.req.json());
+  if (!res.success) return c.json({ error: res.error }, 400);
+  const { name, description } = res.data;
+
+  c.var.db.query("INSERT INTO categories (name, description) VALUES (?, ?)", [name, description]);
+  return c.newResponse(null, 201);
+});
+
+app.delete("/categories/:id", (c) => {
+  const id = parseInt(c.req.param("id"));
+  if (isNaN(id)) return c.json({ error: "param `id` must be an integer" }, 400);
+
+  c.var.db.query("DELETE FROM categories WHERE id = ?", [id]);
+  return c.newResponse(null, 204);
+});
 
 Deno.serve({ port: flags.port }, app.fetch);

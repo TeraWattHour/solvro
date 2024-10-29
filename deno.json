@@ -3,7 +3,7 @@
     "hono": "jsr:@hono/hono@^4.6.8"
   },
   "tasks": {
-    "start": "deno run --allow-net --allow-read --allow-write --watch main.ts --database db.sqlite"
+    "watch": "deno run --allow-net --allow-read --allow-write --watch main.ts --database db.sqlite"
   },
   "compilerOptions": {
     "jsx": "precompile",

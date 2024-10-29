@@ -1,6 +1,6 @@
 import type { Context } from "hono";
 import type { Env } from "../types.ts";
-import { z } from "https://deno.land/x/zod@v3.4.0/mod.ts";
+import { z } from "npm:zod";
 
 const createIngredientSchema = z.object({
   name: z.string(),
