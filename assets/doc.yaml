@@ -1,0 +1,311 @@
+openapi: 3.0.3
+info:
+  title: Zadanie
+  version: 1.0.0
+tags:
+  - name: cocktail
+    description: Browse cocktails
+  - name: ingredient
+    description: Browse ingredients
+paths:
+  /cocktails/{cocktailId}:
+    put:
+      tags:
+        - cocktail
+      summary: Update an existing cocktail
+      parameters:
+        - in: path
+          name: cocktailId
+          schema:
+            type: integer
+          required: true
+      
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cocktail'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid ID
+    get:
+      tags:
+        - cocktail
+      summary: Get a cocktail by id
+      parameters:
+        - in: path
+          name: cocktailId
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FullCocktail'
+        '404':
+          description: Not found
+        '400':
+          description: Invalid ID
+    delete:
+      tags:
+        - cocktail
+      summary: Delete a cocktail by id
+      parameters:
+        - in: path
+          name: cocktailId
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid ID
+  /cocktails:
+    post:
+      tags:
+        - cocktail
+      summary: Create a cocktail
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cocktail'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+        '400':
+          description: Invalid ID
+    get:
+      tags:
+        - cocktail
+      summary: Get all cocktails
+      parameters:
+        - name: is_alcoholic
+          in: query
+          required: false
+          schema:
+            type: boolean
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: category_id
+          in: query
+          required: false
+          schema:
+            type: number
+        - name: has_ingredients
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: no_ingredients
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: number
+            default: 10
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: number
+            default: 1
+      responses:
+        '200':
+          description: Successful query
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cocktail'
+        '400':
+          description: Invalid query
+          
+  /ingredients/{ingredientId}:
+    put:
+      tags:
+        - ingredient
+      summary: Upserts an ingredient
+      parameters:
+        - in: path
+          name: ingredientId
+          schema:
+            type: integer
+          required: true
+      
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ingredient'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid ID
+    get:
+      tags:
+        - ingredient
+      summary: Get an ingredient by id
+      parameters:
+        - in: path
+          name: ingredientId
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ingredient'
+        '404':
+          description: Not found
+        '400':
+          description: Invalid ID
+    delete:
+      tags:
+        - ingredient
+      summary: Delete an ingredient by id
+      parameters:
+        - in: path
+          name: ingredientId
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid ID
+  /ingredients/attach/{cocktailId}/{ingredientId}/{amount}/{unit}:
+    put:
+      tags:
+        - ingredient
+      summary: Associates an ingredient with a cocktail
+      parameters:
+        - in: path
+          name: ingredientId
+          schema:
+            type: integer
+          required: true
+        - in: path
+          name: cocktailId
+          schema:
+            type: integer
+          required: true
+        - in: path
+          name: amount
+          schema:
+            type: number
+          required: true
+        - in: path
+          name: unit
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid query
+  /ingredients/detach/{cocktailId}/{ingredientId}:
+    delete:
+      tags:
+        - ingredient
+      summary: Removes an ingredient from a cocktail
+      parameters:
+        - in: path
+          name: ingredientId
+          schema:
+            type: integer
+          required: true
+        - in: path
+          name: cocktailId
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid query
+components:
+  schemas:
+    FullCocktail:
+      type: object
+      properties:
+        name:
+          type: string
+        category:
+          type: object
+          properties:
+            id: 
+              type: number
+            name:
+              type: string
+            description:
+              type: string
+        recipe:
+          type: array
+          items:
+            type: string
+        ingredients:
+          type: array
+          items:
+            type: object
+            properties:
+              id: 
+                type: number
+              name:
+                type: string
+              description:
+                type: string
+              is_alcoholic:
+                type: boolean
+              thumbnail_url:
+                type: string
+              quantity:
+                type: number
+              unit:
+                type: string
+    Cocktail:
+      type: object
+      properties:
+        name:
+          type: string
+        category_id:
+          type: integer
+        recipe:
+          type: array
+          items:
+            type: string
+    Ingredient:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        is_alcoholic: 
+          type: boolean
+        image:
+          type: string
